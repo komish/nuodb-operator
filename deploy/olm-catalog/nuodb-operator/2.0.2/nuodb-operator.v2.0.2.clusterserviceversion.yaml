@@ -107,71 +107,129 @@ spec:
             name: ""
             version: v2alpha1
         specDescriptors:
-          - description: The desired number of member pods for the deployment
-            displayName: Size
-            path: replicaCount
-            x-descriptors:
-              - 'urn:alm:descriptor:com.tectonic.ui:podCount'
-          - description: Number of admin service pods
-            displayName: AdminCount
+          - description: The number of NuoDB admin service pods.
+            displayName: Pod Count (adminCount)
             path: adminCount
-          - description: Admin persistent storage class name
-            displayName: AdminStorageClass
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:NuoDB Admin'
+              - 'urn:alm:descriptor:com.tectonic.ui:podCount'
+          - description: NuoDB Admin service's persistent storage class. This should match whatever storage class is available in your Kubernetes cluster.
+            displayName: Storage Class (adminStorageClass)
             path: adminStorageClass
-          - description: Admin service log volume size (GB) example
-            displayName: AdminStorageSize
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:NuoDB Admin'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: "NuoDB Admin services log volume size in gigabytes. Example: 5G"
+            displayName: Storage Size (adminStorageSize)
             path: adminStorageSize
-          - description: Load balancer service URL
-            displayName: ApiServer
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:NuoDB Admin'
+          - description: "Load balancer service URL. Example: https://domain:8080"
+            displayName: API Server
             path: apiServer
-          - description: NuoDB fully qualified image name 
-            displayName: Container
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: "NuoDB fully qualified image name (FQIN). Example: nuodb/nuodb-ce:latest"
+            displayName: Container Image (container)
             path: container
-          - description: Availability requirement for this database
-            displayName: DbAvailability
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:NuoDB'
+          - description: "Availability requirement for this database."
+            displayName: Database Availability (dbAvailability)
             path: dbAvailability
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:select:manual'
+              - 'urn:alm:descriptor:com.tectonic.ui:select:single-instance'
+              - 'urn:alm:descriptor:com.tectonic.ui:select:multiple-instance'
+              - 'urn:alm:descriptor:com.tectonic.ui:select:high-availability'
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:NuoDB'
           - description: NuoDB Database name
-            displayName: DbName
+            displayName: Database Name (dbName)
             path: dbName
-          - description: NuoDB Database password 
-            displayName: DbPassword
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:NuoDB'
+          - description: NuoDB Database password
+            displayName: Database Password (dbPassword)
             path: dbPassword
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:password'
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:NuoDB'
           - description: NuoDB Database User
-            displayName: DbUser
+            displayName: Database User (dbUser)
             path: dbUser
-          - description: Additional "nuodb" engine options 
-            displayName: EngineOptions
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:NuoDB'
+          - description: Additional NuoDB engine options. See http://doc.nuodb.com/Latest/Content/Database-Options.htm for reference. # Bug(?): According to the openAPIV3Schema, intended default is "" which may not be achievable using x-descriptors
+            displayName: Engine Options
             path: engineOptions
-          - description: Opt-in to NuoDB Insights
-            displayName: Enable Insights
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:NuoDB'
+          - description: Opt-in to hosted NuoDB Insights at https://insights.nuodb.com/. False for local NuoDB Insights or to disable.
+            displayName: Enable Insights (insightsEnabled)
             path: insightsEnabled
-          - description: Number of SM service pods
-            displayName: SmCount
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:booleanSwitch'
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:NuoDB Insights'
+          - description: Number of Storage Manager service pods
+            displayName: Count (smCount)
             path: smCount
-          - description: NuoDB Storage Manager CPU Limit
-            displayName: SM CPU
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:number'
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:NuoDB Storage Manager'
+          - description: NuoDB Storage Manager CPU limit
+            displayName: CPU Limit (smCpu)
             path: smCpu
-          - description: SM memory (in GB) 
-            displayName: SM Memory
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:text' # Bug(?): This expects a string value, should it expect an integer?
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:NuoDB Storage Manager'
+          - description: 'Storage Manager memory in gigabytes. Example: 5Gi' # Bug(?): This expects a unit E.g. "Gi" so "text" descriptor must be used here
+            displayName: Memory (smMemory)
             path: smMemory
-          - description: SM persistent storage class name
-            displayName: SmStorageClass
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:text' 
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:NuoDB Storage Manager'
+          - description: Storage Manager persistent storage class name
+            displayName: Storage Class (smStorageClass)
             path: smStorageClass
-          - description: Storage manager (SM) volume size (GB)
-            displayName: SmStorageSize
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:Storage Manager'
+          - description: 'Storage Manager volume size in GB. Example: 5Gi' # Bug(?): This expects a unit E.g. "Gi" so "text" descriptor must be used here
+            displayName: Volume Size (SmStorageSize)
             path: smStorageSize
-          - description: NuoDB pod storage mode
-            displayName: StorageMode
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:text' 
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:Storage Manager'
+          - description: Pod storage mode 
+            displayName: Storage Mode (storageMode)
             path: storageMode
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:select:ephemeral'
+              - 'urn:alm:descriptor:com.tectonic.ui:select:persistent'
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:NuoDB'
           - description: Number of transaction engines (TE) nodes
-            displayName: TeCount
+            displayName: Count (teCount)
             path: teCount
-          - description: NuoDB Transaction Engine CPU Limit
-            displayName: TE CPU
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:number'
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:Transaction Engine'
+          - description: Transaction Engine CPU Limit
+            displayName: CPU Limit (teCpu)
             path: teCpu
-          - description: TE memory (in GB)
-            displayName: TeMemory
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:Transaction Engine'
+          - description: "Transaction Enginer memory in gigabytes. Example: 5Gi" # Bug(?): This expects a unit E.g. "Gi" so "text" descriptor must be used here
+            displayName: Memory (teMemory)
             path: teMemory
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:Transaction Engine'
         statusDescriptors:
           - description: AdminHealth of the NuoDB Domain
             displayName: Admin Health
@@ -192,12 +250,12 @@ spec:
             displayName: Status
             path: phase
             x-descriptors:
-            - urn:alm:descriptor:io.kubernetes.phase
+              - 'urn:alm:descriptor:io.kubernetes.phase'
           - description: Explanation for the current status of the application.
             displayName: Status Details
             path: reason
             x-descriptors:
-            - urn:alm:descriptor:io.kubernetes.phase:reason   
+              - 'urn:alm:descriptor:io.kubernetes.phase:reason'
         version: v2alpha1
       - description: Represents a YCSB instance
         displayName: YCSB Server
